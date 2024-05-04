@@ -37,7 +37,10 @@ const start = async () => {
         const chatId = msg.chat.id;
         try {
             if (text === '/start') {
-                await UserModel.create({chatId})
+                const user = await  UserModel.findOne({chatId})
+                if (!user) {
+                    await UserModel.create({chatId})
+                }
                 await bot.sendSticker(chatId, 'https://sl.combot.org/programming_stickers/webp/0xf09f92bb.webp')
                return bot.sendMessage(chatId, `Добро пожаловать в моего бота`)
             }
@@ -50,7 +53,8 @@ const start = async () => {
             }
             return bot.sendMessage(chatId, 'Я тебя не понимаю')
         } catch(e) {
-            return bot.sendMessage(chatId, 'Произошла какая-то ошибка')
+            console.log(e)
+            return bot.sendMessage(chatId, `Произошла какая-то ошибка ${e}`)
         }
     })
     
